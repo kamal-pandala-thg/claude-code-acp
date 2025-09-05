@@ -97,12 +97,14 @@ export class ClaudeAcpAgent implements Agent {
     };
   }
   async newSession(params: NewSessionRequest): Promise<NewSessionResponse> {
-    if (
-      fs.existsSync(path.resolve(os.homedir(), ".claude.json.backup")) &&
-      !fs.existsSync(path.resolve(os.homedir(), ".claude.json"))
-    ) {
+    if (!process.env.UNBOUND_API_KEY) {
       throw RequestError.authRequired();
     }
+
+    // Set environment variables to route through Unbound gateway
+    // This is how unbound-claude-code redirects API calls
+    process.env.ANTHROPIC_BASE_URL = "https://api.getunbound.ai";
+    process.env.ANTHROPIC_API_KEY = process.env.UNBOUND_API_KEY;
 
     const sessionId = uuidv7();
     const input = new Pushable<SDKUserMessage>();
