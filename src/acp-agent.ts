@@ -141,6 +141,8 @@ export class ClaudeAcpAgent implements Agent {
       // note: although not documented by the types, passing an absolute path
       // here works to find zed's managed node version.
       executable: process.execPath as any,
+      model: "anthropic.claude-sonnet-4@20250514",
+      fallbackModel: "anthropic.claude-haiku-3.5@20241022",
     };
 
     const allowedTools = [];
